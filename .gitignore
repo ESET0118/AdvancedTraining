@@ -1,0 +1,12 @@
+.vs/
+bin/
+obj/
+Debug/
+Release/
+*.user
+*.suo
+*.log
+*.tmp
+*.cache
+*.mdf
+*.ldf
