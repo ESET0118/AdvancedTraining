@@ -1,6 +1,9 @@
 
 using College_App.Data;
+using College_App.Model;
+using College_App.Model.Repository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace College_App
 {
@@ -11,6 +14,9 @@ namespace College_App
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+           builder.Services.AddScoped<IStudent,StudentRepository>();
+
 
             builder.Services.AddControllers().AddNewtonsoftJson();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

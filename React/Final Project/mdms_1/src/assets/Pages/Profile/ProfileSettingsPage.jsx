@@ -1,0 +1,50 @@
+// src/Pages/ProfileSettings/ProfileSettingsPage.jsx
+import { useState } from "react";
+import ProfileTab from "./ProfileTab";
+import SecurityTab from "./SecurityTab";
+import NotificationTab from "./NotificationTab";
+
+export default function ProfileSettingsPage() {
+  const [activeTab, setActiveTab] = useState("profile");
+
+  const tabs = [
+    { key: "profile", label: "Profile" },
+    { key: "security", label: "Security" },
+    { key: "notification", label: "Notification" },
+  ];
+
+  return (
+    <div className="flex h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+      {/* Sidebar area (if exists, else flex-starts from left edge) */}
+      <div className="flex-1 flex flex-col items-center pt-8">
+        <h1 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6">
+          Profile & Settings
+        </h1>
+
+        {/* Tabs */}
+        <div className="flex space-x-8 mb-6 border-b border-gray-300 dark:border-gray-700 w-full max-w-lg justify-center">
+          {tabs.map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              className={`pb-2 text-sm font-medium ${
+                activeTab === tab.key
+                  ? "text-purple-600 border-b-2 border-purple-600"
+                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Active Tab Content */}
+        <div className="w-full flex justify-center">
+          {activeTab === "profile" && <ProfileTab />}
+          {activeTab === "security" && <SecurityTab />}
+          {activeTab === "notification" && <NotificationTab />}
+        </div>
+      </div>
+    </div>
+  );
+}

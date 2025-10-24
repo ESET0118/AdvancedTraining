@@ -1,8 +1,12 @@
 ﻿using College_App.Data;
+using College_App.Model;
+using College_App.Model.Repository;
+
 //using College_App.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace College_App.Controllers
 {
@@ -145,13 +149,35 @@ namespace College_App.Controllers
         //    existingStudent.email = studentToPatch.email;
         //    existingStudent.age = studentToPatch.age;
         //    return NoContent(); // Standard response for successful PATCH requests
-        //}
-        private readonly collegeDbContext _context;
+        ////}
+        //private readonly collegeDbContext _context;
 
-        public CollegeApp(collegeDbContext context)
-        {
-            _context = context;
-        }
+        //public CollegeApp(collegeDbContext context)
+        //{
+        //    _context = context;
+        ////}
+
+        //[HttpGet("{id:int}", Name = "getstudentbyid")]
+        //public async Task<ActionResult<Student>> getstudentbyid(int id)
+        //{
+        //    if (id == 0)
+        //    {
+        //        return BadRequest();
+        //    }
+        //    var student =await _context.Students.Where(n => n.studentID == id).FirstAsync();
+
+        //    if (student == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var studentWithID = new Student()
+        //    {
+        //        //studentID = student.studentID,
+        //        name = student.name,
+        //        email = student.email
+        //    };
+        //    return Ok(studentWithID);
+        //}
 
         //[HttpGet]
         //public ActionResult<IEnumerable<Student>> get()
@@ -202,46 +228,68 @@ namespace College_App.Controllers
         //    return Ok();
         //}
 
-        [HttpGet]
-        public ActionResult<Course> getCourse()
+        //[HttpGet]
+        //public ActionResult<Course> getCourse()
+        //{
+        //    return Ok(_context.Courses);
+        //}
+
+        //[HttpPost]
+
+        //public ActionResult<Course> addCourse([FromBody] Course course)
+        //{
+        //    var newCourse = new Course()
+        //    {
+        //        Id=course.Id,
+        //        subject=course.subject
+        //    };
+        //    _context.Add(newCourse);
+        //    _context.SaveChanges();
+        //    return Ok(newCourse);
+        //}
+
+        //[HttpPatch]
+
+        //public ActionResult updateCourse(int id)
+        //{
+        //    var existingCourse = _context.Courses.Where(c => c.Id == id).FirstOrDefault();
+        //    Console.WriteLine("Hello World");
+        //    existingCourse.subject = "Maths";
+        //    _context.SaveChanges();
+        //    return Ok();
+        //}
+
+        //[HttpDelete]
+
+        //public ActionResult deleteCourse(int id)
+        //{
+        //    var toDelete=_context.Courses.Where(c=>c.Id==id).FirstOrDefault();
+        //    _context.Remove(toDelete);
+        //    _context.SaveChanges();
+        //    return Ok();
+        //}
+
+        //[HttpGet]
+
+        //public async Task<ActionResult<IEnumerable<Student>>> getStudents()
+        //{
+        //    var students =await _context.Students.ToListAsync();
+        //    return Ok(students);
+        //}
+
+        private readonly IStudent _IStudent;
+
+        public CollegeApp(IStudent IStudent)
         {
-            return Ok(_context.Courses);
+            _IStudent = IStudent;
         }
 
-        [HttpPost]
-
-        public ActionResult<Course> addCourse([FromBody] Course course)
+        [HttpGet("Get")]
+        public async Task<IEnumerable<Student>> getAll()
         {
-            var newCourse = new Course()
-            {
-                Id=course.Id,
-                subject=course.subject
-            };
-            _context.Add(newCourse);
-            _context.SaveChanges();
-            return Ok(newCourse);
+            return await _IStudent.getAll();
         }
 
-        [HttpPatch]
-
-        public ActionResult updateCourse(int id)
-        {
-            var existingCourse = _context.Courses.Where(c => c.Id == id).FirstOrDefault();
-            Console.WriteLine("Hello World");
-            existingCourse.subject = "Maths";
-            _context.SaveChanges();
-            return Ok();
-        }
-
-        [HttpDelete]
-
-        public ActionResult deleteCourse(int id)
-        {
-            var toDelete=_context.Courses.Where(c=>c.Id==id).FirstOrDefault();
-            _context.Remove(toDelete);
-            _context.SaveChanges();
-            return Ok();
-        }
 
 
 

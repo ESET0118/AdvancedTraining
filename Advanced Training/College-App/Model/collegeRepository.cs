@@ -1,20 +1,19 @@
-﻿namespace College_App.Model
+﻿
+namespace College_App.Model
 {
     public class collegeRepository
     {
-        public static List<Student> students { get; set; } = new List<Student>(){ new Student
+        public static List<College_App.Data.Student> students { get; set; } = new List<College_App.Data.Student>(){ new College_App.Data.Student
        {
            studentID = 1,
            name = "Test",
-           age = 1,
            email = "shivam@gmail.com"
        },
 
-       new Student {
+       new College_App.Data.Student {
 
            studentID = 2,
            name = "Test",
-           age = 2,
            email = "dsckjbdsc"
        }
 

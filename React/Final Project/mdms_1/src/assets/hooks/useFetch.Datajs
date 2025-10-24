@@ -1,0 +1,27 @@
+// src/assets/Hooks/useFetchData.js
+import { useEffect, useState } from "react";
+
+export function useFetchDashboardData() {
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    // simulate api
+    const t = setTimeout(() => {
+      setData({
+        username: "xyz",
+        zone: "Bangalore North",
+        lastSynced: "10:45 AM",
+        cards: [
+          { value: "256 kWh", subText: "Current Consumption" },
+          { value: "₹1,230", subText: "Due on 12 Oct" },
+          { value: "₹120", subText: "Outstanding Balance" },
+          { value: "Paid ₹1,200", subText: "Last Payment on 10 Sep" },
+        ],
+        chartData: [427, 389, 232, 230, 81, 293, 364, 228, 65],
+      });
+      setLoading(false);
+    }, 600);
+    return () => clearTimeout(t);
+  }, []);
+  return { loading, data };
+}
