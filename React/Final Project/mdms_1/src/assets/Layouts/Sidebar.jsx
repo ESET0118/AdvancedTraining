@@ -1,16 +1,18 @@
 import { NavLink } from "react-router-dom";
-
-const items = [
-  { to: "/dashboard", label: "Dashboard" },
-  { to: "/bills", label: "Bills & Payments" },
-  { to: "/data", label: "Meter Data" },
-  { to: "/alerts", label: "Alerts & Notifications" },
-  // 🔁 Changed to route to the main profile section
-  { to: "/profile-settings", label: "Profile & Settings" },
-  { to: "/logs", label: "Logs" },
-];
+import { useTranslation } from "react-i18next";
 
 export default function Sidebar() {
+  const { t } = useTranslation();
+
+  const items = [
+    { to: "/dashboard", label: t("dashboard") },
+    { to: "/bills", label: t("bills") },
+    { to: "/data", label: t("meterData") },
+    { to: "/alerts", label: t("alerts") },
+    { to: "/profile-settings", label: t("profile") },
+    { to: "/logs", label: t("logs") },
+  ];
+
   return (
     <aside className="w-56 bg-white dark:bg-gray-800 h-full border-r dark:border-gray-700 transition-colors duration-300">
       <div className="px-4 py-6">
@@ -22,7 +24,7 @@ export default function Sidebar() {
       <nav className="px-2 space-y-1">
         {items.map((it) => (
           <NavLink
-            key={it.label}
+            key={it.to}
             to={it.to}
             className={({ isActive }) =>
               `block px-4 py-3 rounded-md text-sm transition-all duration-200 ${

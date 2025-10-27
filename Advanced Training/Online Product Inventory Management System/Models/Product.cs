@@ -23,5 +23,5 @@ public partial class Product
 
     [ForeignKey("CategoryId")]
     [InverseProperty("Products")]
-    public virtual Category Category { get; set; } = null!;
+    public virtual Category Category { get; set; }
 }

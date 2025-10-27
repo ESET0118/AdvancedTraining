@@ -16,6 +16,8 @@ import ProfileSettingsPage from "./assets/Pages/Profile/ProfileSettingsPage.jsx"
 
 // Error page
 import ErrorScreen from "./assets/utils/ErrorScreen.jsx";
+import MeterData from "./assets/Pages/MeterData/MeterData.jsx";
+import AlertsNotificationsPage from "./assets/Pages/Alert/AlertsNotificationsPage.jsx";
 
 export default function App() {
   const location = useLocation();
@@ -48,8 +50,8 @@ export default function App() {
           <Route path="/profile-settings" element={<ProfileSettingsPage />} />
 
           {/* Other sidebar pages */}
-          <Route path="/data" element={<ErrorScreen message="Meter Data – Coming Soon" />} />
-          <Route path="/alerts" element={<ErrorScreen message="Alerts – Coming Soon" />} />
+          <Route path="/data" element={<MeterData />} />
+          <Route path="/alerts" element={<AlertsNotificationsPage />} />
           <Route path="/logs" element={<ErrorScreen message="Logs – Coming Soon" />} />
 
           {/* Fallback */}

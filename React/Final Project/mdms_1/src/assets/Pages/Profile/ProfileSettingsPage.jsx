@@ -1,5 +1,5 @@
-// src/Pages/ProfileSettings/ProfileSettingsPage.jsx
 import { useState } from "react";
+import Sidebar from "../../Layouts/Sidebar.jsx";
 import ProfileTab from "./ProfileTab";
 import SecurityTab from "./SecurityTab";
 import NotificationTab from "./NotificationTab";
@@ -15,8 +15,11 @@ export default function ProfileSettingsPage() {
 
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-      {/* Sidebar area (if exists, else flex-starts from left edge) */}
-      <div className="flex-1 flex flex-col items-center pt-8">
+      {/* Sidebar */}
+      <Sidebar />
+
+      {/* Main content */}
+      <main className="flex-1 flex flex-col items-center pt-8 overflow-y-auto">
         <h1 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6">
           Profile & Settings
         </h1>
@@ -27,7 +30,7 @@ export default function ProfileSettingsPage() {
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`pb-2 text-sm font-medium ${
+              className={`pb-2 text-sm font-medium transition-all ${
                 activeTab === tab.key
                   ? "text-purple-600 border-b-2 border-purple-600"
                   : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
@@ -39,12 +42,12 @@ export default function ProfileSettingsPage() {
         </div>
 
         {/* Active Tab Content */}
-        <div className="w-full flex justify-center">
+        <div className="w-full flex justify-center px-4">
           {activeTab === "profile" && <ProfileTab />}
           {activeTab === "security" && <SecurityTab />}
           {activeTab === "notification" && <NotificationTab />}
         </div>
-      </div>
+      </main>
     </div>
   );
 }
