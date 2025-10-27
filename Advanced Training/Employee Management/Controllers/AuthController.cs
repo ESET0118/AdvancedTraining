@@ -35,17 +35,18 @@ namespace Employee_Management.Controllers
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.Name, username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
+            //var claims = new[]
+            //{
+            //    new Claim(ClaimTypes.Name, username),
+            //    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            //};
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
-                claims: claims,
-                signingCredentials: creds
+                //claims: claims,
+                signingCredentials: creds,
+                expires:null
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
