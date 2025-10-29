@@ -60,26 +60,22 @@ export default function MeterDataPage() {
       <Sidebar />
 
       {/* Main content */}
-      <main className="flex-1 overflow-y-auto p-8">
-        <h1 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100">
-          Meter Data
-        </h1>
+      <main className="flex-1 overflow-y-auto p-8 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+        <h1 className="text-2xl font-semibold mb-6">Meter Data</h1>
 
         {/* Chart Section */}
         <Card>
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-              Select Date Range
-            </h2>
+            <h2 className="text-lg font-semibold">Select Date Range</h2>
             <div className="flex space-x-2">
               {["Day", "Week", "Month"].map((label) => (
                 <button
                   key={label}
                   onClick={() => setSelectedRange(label)}
-                  className={`px-4 py-1 rounded-full border transition ${
+                  className={`px-4 py-1 rounded-full border transition-colors duration-300 ${
                     selectedRange === label
                       ? "bg-purple-200 text-purple-700 dark:bg-purple-600 dark:text-white"
-                      : "bg-gray-100 dark:bg-gray-700 dark:text-gray-200"
+                      : "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
                   }`}
                 >
                   {label}
@@ -97,13 +93,13 @@ export default function MeterDataPage() {
         {/* Table Section */}
         <Card>
           <div className="overflow-x-auto">
-            <table className="min-w-full text-sm text-center border-collapse">
+            <table className="min-w-full text-sm text-center border-collapse text-gray-900 dark:text-gray-100">
               <thead className="bg-gray-100 dark:bg-gray-700 border-b border-gray-300 dark:border-gray-600">
                 <tr>
                   {["Date", "Reading", "Difference", "Notes"].map((header) => (
                     <th
                       key={header}
-                      className="p-2 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100"
+                      className="p-2 border border-gray-300 dark:border-gray-600"
                     >
                       {header}
                     </th>
@@ -116,10 +112,18 @@ export default function MeterDataPage() {
                     key={idx}
                     className="border-b border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
                   >
-                    <td className="p-2 border">{row.date}</td>
-                    <td className="p-2 border">{row.reading}</td>
-                    <td className="p-2 border">{row.difference}</td>
-                    <td className="p-2 border">{row.notes}</td>
+                    <td className="p-2 border border-gray-300 dark:border-gray-600">
+                      {row.date}
+                    </td>
+                    <td className="p-2 border border-gray-300 dark:border-gray-600">
+                      {row.reading}
+                    </td>
+                    <td className="p-2 border border-gray-300 dark:border-gray-600">
+                      {row.difference}
+                    </td>
+                    <td className="p-2 border border-gray-300 dark:border-gray-600">
+                      {row.notes}
+                    </td>
                   </tr>
                 ))}
               </tbody>

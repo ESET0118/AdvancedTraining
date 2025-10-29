@@ -1,66 +1,123 @@
-// src/Pages/Bills/BillDetailsPage.jsx
-import { useParams, useNavigate } from "react-router-dom";
+// src/Pages/Bills/BillDetails.jsx
+import { useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../../Layouts/Sidebar.jsx";
-import BillDetailsTable from "../../Components/Bills/BillDetailsTable.jsx";
-import BillActions from "../../Components/Bills/BillActions.jsx";
 
-export default function BillDetailsPage() {
-  const { month } = useParams();
+export default function BillDetails() {
+  const { state } = useLocation();
   const navigate = useNavigate();
+  const bill = state || { month: "Unknown", amount: "N/A", dueDate: "-", status: "-" };
 
-  const bill = {
-    month: "September 2025",
-    total: "₹1230",
-    dueDate: "12 Oct 2025",
-    status: "Pending",
-    readings: [
-      { date: "01 Sep 2025", consumption: "25 kWh", cost: "₹120" },
-      { date: "02 Sep 2025", consumption: "24 kWh", cost: "₹115" },
-    ],
-  };
-
-  const handleDownload = () => alert("Downloading PDF...");
-  const handlePrint = () => window.print();
-  const handlePay = () => alert("Redirecting to payment...");
+  const details = [
+    { date: "01 Sep 2025", reading: "25 kWh", consumption: "25 kWh", cost: "₹20" },
+    { date: "02 Sep 2025", reading: "28 kWh", consumption: "3 kWh", cost: "₹3" },
+    { date: "03 Sep 2025", reading: "30 kWh", consumption: "2 kWh", cost: "₹2" },
+  ];
 
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       <Sidebar />
 
-      <main className="flex-1 overflow-y-auto p-8">
-        <button
-          onClick={() => navigate(-1)}
-          className="text-gray-600 dark:text-gray-300 text-sm mb-4 hover:underline"
-        >
-          ← Back
-        </button>
+      <main className="flex-1 overflow-y-auto p-8 text-gray-900 dark:text-gray-100">
+        {/* Header */}
+        <div className="flex items-center mb-6">
+          <button
+            onClick={() => navigate(-1)}
+            className="text-purple-600 dark:text-purple-400 hover:underline mr-3"
+          >
+            ← Back
+          </button>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Bill Details – {bill.month || "N/A"}
+          </h1>
+        </div>
 
-        <h1 className="text-xl font-semibold mb-6 text-gray-800 dark:text-gray-100">
-          Bill Details – {bill.month}
-        </h1>
+        {/* Bill Summary */}
+        <div className="bg-white dark:bg-gray-800 shadow-md rounded-2xl p-6 mb-8 border border-gray-200 dark:border-gray-700">
+          <h2 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-200 text-center">
+            Bill Summary
+          </h2>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse text-sm text-center">
+              <thead className="bg-gray-100 dark:bg-gray-700">
+                <tr>
+                  {["Month", "Total Amount", "Due Date", "Status"].map((h, i) => (
+                    <th
+                      key={i}
+                      className="px-6 py-3 font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200"
+                    >
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="hover:bg-gray-50 dark:hover:bg-gray-700 border-t border-gray-300 dark:border-gray-600">
+                  <td className="px-6 py-3 border border-gray-300 dark:border-gray-600">{bill.month}</td>
+                  <td className="px-6 py-3 border border-gray-300 dark:border-gray-600">{bill.amount}</td>
+                  <td className="px-6 py-3 border border-gray-300 dark:border-gray-600">{bill.dueDate}</td>
+                  <td
+                    className={`px-6 py-3 border border-gray-300 dark:border-gray-600 font-medium ${
+                      bill.status === "Paid"
+                        ? "text-green-600 dark:text-green-400"
+                        : "text-red-500 dark:text-red-400"
+                    }`}
+                  >
+                    {bill.status}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-        {/* Summary Table */}
-        <table className="w-full mb-6 border border-gray-200 dark:border-gray-700 text-sm">
-          <thead className="bg-gray-100 dark:bg-gray-800">
-            <tr className="text-gray-700 dark:text-gray-200">
-              <th className="px-6 py-3">Month</th>
-              <th className="px-6 py-3">Total Amount</th>
-              <th className="px-6 py-3">Due Date</th>
-              <th className="px-6 py-3">Status</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100">
-            <tr>
-              <td className="px-6 py-3">{bill.month}</td>
-              <td className="px-6 py-3">{bill.total}</td>
-              <td className="px-6 py-3">{bill.dueDate}</td>
-              <td className="px-6 py-3">{bill.status}</td>
-            </tr>
-          </tbody>
-        </table>
+        {/* Detailed Table */}
+        <div className="bg-white dark:bg-gray-800 shadow-md rounded-2xl p-6 mb-8 border border-gray-200 dark:border-gray-700">
+          <h2 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-200 text-center">
+            Detailed Consumption
+          </h2>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse text-sm text-center">
+              <thead className="bg-gray-100 dark:bg-gray-700">
+                <tr>
+                  {["Date", "Reading", "Consumption", "Cost"].map((h, i) => (
+                    <th
+                      key={i}
+                      className="px-6 py-3 font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200"
+                    >
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {details.map((row, idx) => (
+                  <tr
+                    key={idx}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-700 border-t border-gray-300 dark:border-gray-600"
+                  >
+                    <td className="px-6 py-3 border border-gray-300 dark:border-gray-600">{row.date}</td>
+                    <td className="px-6 py-3 border border-gray-300 dark:border-gray-600">{row.reading}</td>
+                    <td className="px-6 py-3 border border-gray-300 dark:border-gray-600">{row.consumption}</td>
+                    <td className="px-6 py-3 border border-gray-300 dark:border-gray-600">{row.cost}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-        <BillDetailsTable readings={bill.readings} />
-        <BillActions onDownload={handleDownload} onPrint={handlePrint} onPay={handlePay} />
+        {/* Action Buttons */}
+        <div className="flex justify-center space-x-4">
+          <button className="border border-gray-400 dark:border-gray-500 rounded-full px-6 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+            Download PDF
+          </button>
+          <button className="border border-gray-400 dark:border-gray-500 rounded-full px-6 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+            Print Bill
+          </button>
+          <button className="bg-purple-600 text-white px-8 py-2 rounded-full hover:bg-purple-700 transition">
+            Pay Now
+          </button>
+        </div>
       </main>
     </div>
   );

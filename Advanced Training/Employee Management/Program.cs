@@ -69,6 +69,22 @@ namespace Employee_Management
             });
 
             builder.Services.AddControllers();
+
+            //Add Cors
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowUI", policy =>
+                {
+                    policy.WithOrigins("https://localhost:7242") // your UI project's URL
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
+
+
+
             builder.Services.AddEndpointsApiExplorer();
 
             var app = builder.Build();
@@ -81,6 +97,8 @@ namespace Employee_Management
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("AllowUI");
 
             // ?? Add Authentication & Authorization middleware
             app.UseAuthentication();

@@ -1,0 +1,318 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<style>
+    body {
+        background-color: #f5f5f7;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        padding: 30px;
+    }
+
+    .card {
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        padding: 20px;
+        margin-bottom: 40px;
+        background-color: #fff;
+    }
+
+    h3 {
+        margin-bottom: 20px;
+    }
+
+    .btn-custom {
+        border-radius: 10px;
+        padding: 6px 12px;
+        margin-right: 5px;
+    }
+
+    .btn-add {
+        background-color: #0071e3;
+        color: white;
+    }
+
+        .btn-add:hover {
+            background-color: #005bb5;
+        }
+
+    .btn-edit {
+        background-color: #ffa500;
+        color: white;
+    }
+
+        .btn-edit:hover {
+            background-color: #cc8400;
+        }
+
+    .btn-delete {
+        background-color: #dc3545;
+        color: white;
+    }
+
+        .btn-delete:hover {
+            background-color: #b02a37;
+        }
+</style>
+
+<div class="container">
+
+    <!-- Student Table -->
+    <div class="card">
+        <h3>
+            Students
+            <button class="btn btn-custom btn-add" id="addStudentBtn">Add Student</button>
+        </h3>
+        <table class="table table-striped" id="studentTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Roll Number</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Course ID</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- Course Table -->
+    <div class="card">
+        <h3>
+            Courses
+            <button class="btn btn-custom btn-add" id="addCourseBtn">Add Course</button>
+        </h3>
+        <table class="table table-striped" id="courseTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Course Code</th>
+                    <th>Course Name</th>
+                    <th>Department</th>
+                    <th>Semester</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- Student Modal -->
+<div class="modal fade" id="studentModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="studentModalTitle">Add Student</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="studentId">
+                <input type="text" id="studentRoll" class="form-control mb-2" placeholder="Roll Number">
+                <input type="text" id="studentName" class="form-control mb-2" placeholder="Name">
+                <input type="email" id="studentEmail" class="form-control mb-2" placeholder="Email">
+                <input type="text" id="studentPhone" class="form-control mb-2" placeholder="Phone">
+                <input type="number" id="studentCourseId" class="form-control mb-2" placeholder="Course ID">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="saveStudentBtn">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Course Modal -->
+<div class="modal fade" id="courseModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="courseModalTitle">Add Course</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="courseId">
+                <input type="text" id="courseCode" class="form-control mb-2" placeholder="Course Code">
+                <input type="text" id="courseName" class="form-control mb-2" placeholder="Course Name">
+                <input type="text" id="courseDept" class="form-control mb-2" placeholder="Department">
+                <input type="number" id="courseSemester" class="form-control mb-2" placeholder="Semester">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="saveCourseBtn">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        const apiBase = "https://localhost:7197/api";
+        const token = localStorage.getItem("jwtToken");
+
+        // ---------------- Load Students ----------------
+        function loadStudents() {
+            $.ajax({
+                url: `${apiBase}/Student`,
+                type: "GET",
+                headers: { "Authorization": "Bearer " + token },
+                success: function(students) {
+                    let html = "";
+                    students.forEach(s => {
+                        html += `<tr>
+                            <td>${s.studentId}</td>
+                            <td>${s.rollNumber}</td>
+                            <td>${s.name}</td>
+                            <td>${s.email}</td>
+                            <td>${s.phone}</td>
+                            <td>${s.courseId || ''}</td>
+                            <td>
+                                <button class="btn btn-custom btn-edit" onclick="editStudent(${s.studentId}, '${s.rollNumber}', '${s.name}', '${s.email}', '${s.phone}', '${s.courseId}')">Edit</button>
+                                <button class="btn btn-custom btn-delete" onclick="deleteStudent(${s.studentId})">Delete</button>
+                            </td>
+                        </tr>`;
+                    });
+                    $("#studentTable tbody").html(html);
+                }
+            });
+        }
+
+        // ---------------- Load Courses ----------------
+        function loadCourses() {
+            $.ajax({
+                url: `${apiBase}/Course`,
+                type: "GET",
+                headers: { "Authorization": "Bearer " + token },
+                success: function(courses) {
+                    let html = "";
+                    courses.forEach(c => {
+                        html += `<tr>
+                            <td>${c.courseId}</td>
+                            <td>${c.courseCode}</td>
+                            <td>${c.courseName}</td>
+                            <td>${c.department}</td>
+                            <td>${c.semester || ''}</td>
+                            <td>
+                                <button class="btn btn-custom btn-edit" onclick="editCourse(${c.courseId}, '${c.courseCode}', '${c.courseName}', '${c.department}', '${c.semester}')">Edit</button>
+                                <button class="btn btn-custom btn-delete" onclick="deleteCourse(${c.courseId})">Delete</button>
+                            </td>
+                        </tr>`;
+                    });
+                    $("#courseTable tbody").html(html);
+                }
+            });
+        }
+
+        loadStudents();
+        loadCourses();
+
+        // ---------------- Student CRUD ----------------
+        window.addStudent = function() {
+            $("#studentId, #studentRoll, #studentName, #studentEmail, #studentPhone, #studentCourseId").val('');
+            $("#studentModalTitle").text("Add Student");
+            new bootstrap.Modal(document.getElementById('studentModal')).show();
+        }
+
+        window.editStudent = function(id, roll, name, email, phone, courseId) {
+            $("#studentId").val(id);
+            $("#studentRoll").val(roll);
+            $("#studentName").val(name);
+            $("#studentEmail").val(email);
+            $("#studentPhone").val(phone);
+            $("#studentCourseId").val(courseId);
+            $("#studentModalTitle").text("Edit Student");
+            new bootstrap.Modal(document.getElementById('studentModal')).show();
+        }
+
+        $("#saveStudentBtn").click(function() {
+            const student = {
+                studentId: parseInt($("#studentId").val()) || 0,
+                rollNumber: $("#studentRoll").val(),
+                name: $("#studentName").val(),
+                email: $("#studentEmail").val(),
+                phone: $("#studentPhone").val(),
+                courseId: $("#studentCourseId").val() ? parseInt($("#studentCourseId").val()) : null
+            };
+            const method = student.studentId > 0 ? "PUT" : "POST";
+            $.ajax({
+                url: `${apiBase}/Student${method === "PUT" ? "/" + student.studentId : ""}`,
+                type: method,
+                headers: { "Authorization": "Bearer " + token },
+                contentType: "application/json",
+                data: JSON.stringify(student),
+                success: function() { loadStudents(); bootstrap.Modal.getInstance(document.getElementById('studentModal')).hide(); },
+                error: function(xhr) { alert("Error: " + xhr.responseText); }
+            });
+        });
+
+        window.deleteStudent = function(id) {
+            if(confirm("Are you sure?")) {
+                $.ajax({
+                    url: `${apiBase}/Student/${id}`,
+                    type: "DELETE",
+                    headers: { "Authorization": "Bearer " + token },
+                    success: loadStudents,
+                    error: function(xhr) { alert("Error: " + xhr.responseText); }
+                });
+            }
+        }
+
+        // ---------------- Course CRUD ----------------
+        window.addCourse = function() {
+            $("#courseId, #courseCode, #courseName, #courseDept, #courseSemester").val('');
+            $("#courseModalTitle").text("Add Course");
+            new bootstrap.Modal(document.getElementById('courseModal')).show();
+        }
+
+        window.editCourse = function(id, code, name, dept, sem) {
+            $("#courseId").val(id);
+            $("#courseCode").val(code);
+            $("#courseName").val(name);
+            $("#courseDept").val(dept);
+            $("#courseSemester").val(sem);
+            $("#courseModalTitle").text("Edit Course");
+            new bootstrap.Modal(document.getElementById('courseModal')).show();
+        }
+
+        $("#saveCourseBtn").click(function() {
+            const course = {
+                courseId: parseInt($("#courseId").val()) || 0,
+                courseCode: $("#courseCode").val(),
+                courseName: $("#courseName").val(),
+                department: $("#courseDept").val(),
+                semester: $("#courseSemester").val() ? parseInt($("#courseSemester").val()) : null
+            };
+            const method = course.courseId > 0 ? "PUT" : "POST";
+            $.ajax({
+                url: `${apiBase}/Course${method === "PUT" ? "/" + course.courseId : ""}`,
+                type: method,
+                headers: { "Authorization": "Bearer " + token },
+                contentType: "application/json",
+                data: JSON.stringify(course),
+                success: function() { loadCourses(); bootstrap.Modal.getInstance(document.getElementById('courseModal')).hide(); },
+                error: function(xhr) { alert("Error: " + xhr.responseText); }
+            });
+        });
+
+        window.deleteCourse = function(id) {
+            if(confirm("Are you sure?")) {
+                $.ajax({
+                    url: `${apiBase}/Course/${id}`,
+                    type: "DELETE",
+                    headers: { "Authorization": "Bearer " + token },
+                    success: loadCourses,
+                    error: function(xhr) { alert("Error: " + xhr.responseText); }
+                });
+            }
+        }
+
+        $("#addStudentBtn").click(addStudent);
+        $("#addCourseBtn").click(addCourse);
+    });
+</script>

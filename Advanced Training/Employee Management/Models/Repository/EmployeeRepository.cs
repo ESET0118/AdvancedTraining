@@ -6,6 +6,11 @@ namespace Employee_Management.Models.Repository
     public class EmployeeRepository : IEmployeeRepository
     {
         private readonly EmployeeDbContext _context;
+
+        public EmployeeRepository(EmployeeDbContext context)
+        {
+            _context = context;
+        }
         public async Task AddAsync(Employee employee)
         {
             await _context.Employees.AddAsync(employee);
@@ -31,8 +36,15 @@ namespace Employee_Management.Models.Repository
 
         public async Task UpdateAsync(Employee employee)
         {
-            var emp=await _context.Employees.FindAsync(employee.EmployeeId);
-            emp.Equals(employee);
+            var emp = await _context.Employees.FindAsync(employee.EmployeeId);
+            if (emp == null)
+                return;
+
+            emp.FullName = employee.FullName;
+            emp.Email = employee.Email;
+            emp.Department = employee.Department;
+            emp.Salary = employee.Salary;
+
             await _context.SaveChangesAsync();
         }
     }

@@ -46,7 +46,7 @@ namespace Employee_Management.Controllers
                 audience: _configuration["Jwt:Audience"],
                 //claims: claims,
                 signingCredentials: creds,
-                expires:null
+                expires: DateTime.Now.AddHours(1)
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
