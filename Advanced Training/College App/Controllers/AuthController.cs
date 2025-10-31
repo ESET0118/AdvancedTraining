@@ -1,9 +1,11 @@
 ﻿using College_App.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,31 +17,39 @@ namespace College_App.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly CollegeDbContext _context;
 
-        public AuthController(IConfiguration configuration)
+        public AuthController(IConfiguration configuration, CollegeDbContext context)
         {
             _configuration = configuration;
+            _context = context;
         }
 
         // 🔹 POST: api/auth/login
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] User user)
+        public async Task<IActionResult> Login([FromBody] LoginRequest user)
         {
             if (user == null || string.IsNullOrWhiteSpace(user.Username) || string.IsNullOrWhiteSpace(user.Password))
                 return BadRequest("Username and password are required.");
 
-            // ✅ Temporary hardcoded authentication (replace later with DB validation)
-            if (user.Username == "admin" && user.Password == "admin123")
-            {
-                var token = GenerateJwtToken(user);
-                return Ok(new
-                {
-                    Message = "Login successful!",
-                    Token = token
-                });
-            }
+            // ✅ Check if user exists in the database
+            var dbUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Username == user.Username && u.Password == user.Password);
 
-            return Unauthorized("Invalid username or password.");
+            if (dbUser == null)
+                return Unauthorized("Invalid username or password.");
+
+            // ✅ Allow only Admin role to log in
+            if (!string.Equals(dbUser.Role, "Administrator", StringComparison.OrdinalIgnoreCase))
+                return Unauthorized("Only Admin users are authorized.");
+
+            // ✅ Generate JWT token
+            var token = GenerateJwtToken(dbUser);
+            return Ok(new
+            {
+                Message = "Login successful!",
+                Token = token
+            });
         }
 
         // 🔹 JWT Token Generator
@@ -51,7 +61,7 @@ namespace College_App.Controllers
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, user.Role ?? "User"),
+                new Claim(ClaimTypes.Role, user.Role),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
@@ -74,10 +84,10 @@ namespace College_App.Controllers
         }
     }
 
-    public class User
+    // ✅ New lightweight DTO (so we don't require Role)
+    public class LoginRequest
     {
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
-        public string Role { get; set; } = "User";
     }
 }

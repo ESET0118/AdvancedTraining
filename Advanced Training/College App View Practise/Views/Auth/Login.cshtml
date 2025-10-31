@@ -77,32 +77,44 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        $(document).ready(function(){
-            $("#loginForm").submit(function(e){
+        $(document).ready(function () {
+            $("#loginForm").submit(function (e) {
                 e.preventDefault();
 
-                var user = {
-                    username: $("#username").val(),   
-                    password: $("#password").val()
+                const user = {
+                    Username: $("#username").val().trim(),
+                    Password: $("#password").val().trim()
                 };
 
+                console.log("Sending:", user); // ✅ Debug in browser console
+
                 $.ajax({
-                    url: "https://localhost:7197/api/Auth/login", // Your API endpoint
+                    url: "https://localhost:7197/api/Auth/login",
                     type: "POST",
-                    contentType: "application/json",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
                     data: JSON.stringify(user),
-                    success: function(response){
+                    success: function (response) {
+                        console.log("✅ Response:", response);
                         localStorage.setItem("jwtToken", response.token);
-                        $("#message").removeClass("text-danger").addClass("text-success").text("Login Successful");
-                        // Uncomment to redirect after login
+                        $("#message")
+                            .removeClass("text-danger")
+                            .addClass("text-success")
+                            .text("Login Successful");
                         window.location.href = "/Student/Student";
                     },
-                    error: function(xhr){
-                        $("#message").removeClass("text-success").addClass("text-danger").text("Invalid Credentials");
+                    error: function (xhr) {
+                        console.log("❌ Error Response:", xhr);
+                        const message = xhr.responseText || "Invalid Credentials";
+                        $("#message")
+                            .removeClass("text-success")
+                            .addClass("text-danger")
+                            .text(message);
                     }
                 });
             });
         });
     </script>
+
 </body>
 </html>
