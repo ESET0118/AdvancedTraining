@@ -1,4 +1,4 @@
-import Sidebar from "../../Layouts/Sidebar.jsx";
+import Sidebar from "../../Layouts/Sidebar/Sidebar.jsx";
 import { Bell } from "lucide-react";
 
 export default function AlertsNotificationsPage() {

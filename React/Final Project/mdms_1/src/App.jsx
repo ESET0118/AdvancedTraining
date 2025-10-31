@@ -19,6 +19,10 @@ import ErrorScreen from "./assets/utils/ErrorScreen.jsx";
 import MeterData from "./assets/Pages/MeterData/MeterData.jsx";
 import AlertsNotificationsPage from "./assets/Pages/Alert/AlertsNotificationsPage.jsx";
 
+import EndUserDashboard from "./assets/Pages/End User/EndUserDashboard.jsx";
+import MeterManagementPage from "./assets/Pages/End User/MeterManagementPage.jsx";
+import UserManagementPage from "./assets/Pages/End User/UserManagementPage.jsx";
+
 export default function App() {
   const location = useLocation();
   const noHeaderRoutes = ["/login", "/reset", "/new"];
@@ -53,6 +57,11 @@ export default function App() {
           <Route path="/data" element={<MeterData />} />
           <Route path="/alerts" element={<AlertsNotificationsPage />} />
           <Route path="/logs" element={<ErrorScreen message="Logs – Coming Soon" />} />
+
+          <Route path="/enduser-dashboard" element={<EndUserDashboard />} />
+          <Route path="/meter-management" element={<MeterManagementPage />} />
+          <Route path="/user-management" element={<UserManagementPage />} />
+
 
           {/* Fallback */}
           <Route path="*" element={<ErrorScreen message="404 NOT FOUND" />} />

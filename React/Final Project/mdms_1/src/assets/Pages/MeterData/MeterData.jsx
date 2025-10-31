@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Sidebar from "../../Layouts/Sidebar.jsx";
+import Sidebar from "../../Layouts/Sidebar/Sidebar.jsx";
 import Card from "../../Components/Card.jsx";
 import LineChart from "../../Components/LineChart.jsx";
 

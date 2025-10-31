@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Sidebar from "../../Layouts/Sidebar.jsx";
+import Sidebar from "../../Layouts/Sidebar/Sidebar.jsx";
 import ProfileTab from "./ProfileTab";
 import SecurityTab from "./SecurityTab";
 import NotificationTab from "./NotificationTab";

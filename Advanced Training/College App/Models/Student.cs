@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace College_App.Models;
@@ -38,7 +37,5 @@ public partial class Student
 
     [ForeignKey("CourseId")]
     [InverseProperty("Students")]
-
-    [JsonIgnore]
     public virtual Course? Course { get; set; }
 }

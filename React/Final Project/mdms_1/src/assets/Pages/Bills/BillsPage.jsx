@@ -1,6 +1,6 @@
 // src/Pages/MeterData/MeterData.jsx
 import { useNavigate } from "react-router-dom";
-import Sidebar from "../../Layouts/Sidebar.jsx";
+import Sidebar from "../../Layouts/Sidebar/Sidebar.jsx";
 
 export default function MeterData() {
   const navigate = useNavigate();

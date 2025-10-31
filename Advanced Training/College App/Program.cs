@@ -40,7 +40,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowViewProject", policy =>
     {
         policy
-            .WithOrigins("https://localhost:7204")
+            .WithOrigins("https://localhost:7029")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });

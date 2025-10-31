@@ -15,10 +15,8 @@ export default function Sidebar() {
 
   return (
     <aside className="w-56 bg-white dark:bg-gray-800 h-full border-r dark:border-gray-700 transition-colors duration-300">
+      
       <div className="px-4 py-6">
-        <div className="text-lg font-bold text-gray-800 dark:text-gray-100">
-          MDMS
-        </div>
       </div>
 
       <nav className="px-2 space-y-1">

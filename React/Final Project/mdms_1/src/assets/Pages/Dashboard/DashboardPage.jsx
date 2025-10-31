@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Dashboard from "../../Components/Dashboard.jsx";
-import Sidebar from "../../Layouts/Sidebar.jsx";
+import Sidebar from "../../Layouts/Sidebar/Sidebar.jsx";
 
 export default function DashboardPage() {
   const [showSidebar, setShowSidebar] = useState(true);
