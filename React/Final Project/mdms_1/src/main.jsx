@@ -4,6 +4,8 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./index.css";
 import "./i18n"; // ⬅️ import here
+import "bootstrap-icons/font/bootstrap-icons.css";
+
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(

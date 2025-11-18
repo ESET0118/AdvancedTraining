@@ -2,6 +2,7 @@ import React from "react";
 
 export default function Button({
   text,
+  children,
   bgColor = "bg-white",
   textColor = "text-gray-900",
   fontSize = "text-sm",
@@ -34,7 +35,7 @@ export default function Button({
         transition-all duration-300
       `}
     >
-      {text}
+      {children || text}
     </button>
   );
 }
